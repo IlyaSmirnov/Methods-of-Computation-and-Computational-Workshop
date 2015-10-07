@@ -14,40 +14,89 @@ double findTheFirstApprox(Polynomial pol, double a, double b)
 	{
 		return currentAppr;
 	}
+
+	if (pol.value(a) * pol.value((a + b) / 2) < 0)
+	{
+		currentAppr = findTheFirstApprox(pol, a, currentAppr);
+	}
 	else
 	{
-		if (pol.value(a) * pol.value((a + b) / 2) < 0)
-		{
-			currentAppr = findTheFirstApprox(pol, a, currentAppr);
-		}
-		else
-		{
-			currentAppr = findTheFirstApprox(pol, currentAppr, b);
-		}
+		currentAppr = findTheFirstApprox(pol, currentAppr, b);
 	}
 
 	return currentAppr;
 }
 
-double newton(Polynomial pol, double a, double b)
+void findSolution(Polynomial pol, double a, double b)
 {
-	double firstApprx = findTheFirstApprox(pol, a, b);
-	double currentApprx  = firstApprx - pol.value(firstApprx) / pol.derivative(firstApprx);
-	double newApprx = currentApprx - pol.value(currentApprx) / pol.derivative(currentApprx);
+	double currAppr = findTheFirstApprox(pol, a, b);
+	cout << "0 " << currAppr << ' ' << pol.value(currAppr) << endl;
+	double tmp = pol.value(currAppr);
+	double tmp1 = pol.derivative(currAppr);
+	double newAppr = currAppr - pol.value(currAppr) / pol.derivative(currAppr);
+	cout << "1 " << newAppr << ' ' << pol.value(newAppr) << endl;
 
-	while (fabs(currentApprx - newApprx) > eps)
+	int k = 2;
+
+	while (fabs(newAppr - currAppr) > eps)
 	{
-		currentApprx = newApprx;
-		newApprx = currentApprx - pol.value(currentApprx) / pol.derivative(currentApprx);
+		currAppr = newAppr;
+		newAppr = currAppr - pol.value(currAppr) / pol.derivative(currAppr);
+		cout << k << ' ' << newAppr << ' ' << pol.value(newAppr) << endl;
+		++k;
+	}
+	cout << endl;
+}
+
+void findSolutions(Polynomial pol)
+{
+	double a = pol.posInf();
+	double b = pol.sup();
+
+	double h = (b - a) / 1000;
+	for (double i = a; i < b; i = i + h)
+	{
+		if (pol.value(i) * pol.value(i + h) < 0)
+			findSolution(pol, i, i + h);
 	}
 
-	return newApprx;
+	a = pol.infim();
+	b = pol.negSup();
+
+	h = -(a - b) / 1000;
+	for (double i = a; i < b; i = i + h)
+	{
+		if (pol.value(i) * pol.value(i + h) < 0)
+			findSolution(pol, i, i + h);
+	}
 }
 
 int main()
 {
-	Polynomial pol;
-	cout << newton(pol, 1.1, 1.5) << endl;
+	vector<Monomial> mons;
+	//first
+	//	mons.push_back(Monomial(2048, 12));
+	//	mons.push_back(Monomial(-6144, 10));
+	//	mons.push_back(Monomial(6912, 8));
+	//	mons.push_back(Monomial(-3584, 6));
+	//	mons.push_back(Monomial(840, 4));
+	//	mons.push_back(Monomial(-72, 2));
+	//	mons.push_back(Monomial(1, 0));
+
+	//second
+	//	mons.push_back(Monomial(1, 4));
+	//	mons.push_back(Monomial(2, 3));
+	//	mons.push_back(Monomial(-25, 2));
+	//	mons.push_back(Monomial(-2, 1));
+	//	mons.push_back(Monomial(24, 0));
+	//third
+	mons.push_back(Monomial(1, 3));
+	mons.push_back(Monomial(9, 2));
+	mons.push_back(Monomial(-6, 1));
+	mons.push_back(Monomial(-18, 0));
+	Polynomial pol(mons);
+
+	findSolutions(pol);
 
 	return 0;
 }
