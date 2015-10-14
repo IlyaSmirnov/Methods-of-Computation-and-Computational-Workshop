@@ -1,7 +1,8 @@
 #pragma once
 
 #include <map>
-#include "myfunction.h"
+#include "myfunctionf.h"
+#include "myfunctiong.h"
 
 using namespace std;
 
@@ -11,7 +12,8 @@ public:
 	Lagrange(map <int, std::pair<double, double>> points, int numberOfPoints);
 
 	double value(double x);
-	double error(int degree, double x, MyFunction f);
+	double error(int degree, double x, MyFunctionF f);
+	double error(int degree, double x, MyFunctionG g);
 
 private:
 	int numberOfPoints;

@@ -1,10 +1,11 @@
 #pragma once
+
 #include <math.h>
 
-class MyFunction
+class MyFunctionG
 {
 public:
-	MyFunction();
+	MyFunctionG();
 
 	double value(double x);
 	double maxDerv(int degree, double x);
