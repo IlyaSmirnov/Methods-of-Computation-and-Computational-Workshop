@@ -54,10 +54,10 @@ double rungeKutta(double h, double xk, double yk)
 
 int main()
 {
-	double x[n + 1] = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1};
+	double x[n + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1};
 	double y[n + 1];
 	y[0] = y_0;
-	for (int i = 1; i < n + 1; i++)
+	for (int i = 1; i < 5; i++)
 	{
 		y[i] = rungeKutta(h, x[i - 1], y[i - 1]);
 	}
@@ -69,27 +69,27 @@ int main()
 	double d3eta[n - 2];
 	double d4eta[n - 3];
 
-	for (int i = 0; i < n + 1; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		eta[i] = h * f(x[i], y[i]);
 	}
 
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		deta[i] = eta[i + 1] - eta[i];
 	}
 
-	for (int i = 0; i < n - 1; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		d2eta[i] = deta[i + 1] - deta[i];
 	}
 
-	for (int i = 0; i < n - 2; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		d3eta[i] = d2eta[i + 1] - d2eta[i];
 	}
 
-	for (int i = 0; i < n - 3; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		d4eta[i] = d3eta[i + 1] - d3eta[i];
 	}
@@ -98,6 +98,11 @@ int main()
 	while(k < n + 1)
 	{
 		y[k + 1] = adams(k, y[k], eta, deta, d2eta, d3eta, d4eta);
+		eta[k + 1] = h * f(x[k + 1], y[k + 1]);
+		deta[k] = eta[k + 1] - eta[k];
+		d2eta[k - 1] = deta[k] - deta[k - 1];
+		d3eta[k - 2] = d2eta[k - 1] - d2eta[k - 2];
+		d4eta[k - 3] = d3eta[k - 2] - d3eta[k - 3];
 		k++;
 	}
 
